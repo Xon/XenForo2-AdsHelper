@@ -1,0 +1,16 @@
+{
+    "legacy_addon_id": "",
+    "title": "Ads Helper",
+    "description": "Inject state into $xf.visitor for ad tracking",
+    "version_id": 1000000,
+    "version_string": "1.0.0",
+    "dev": "Atelier Aphelion",
+    "dev_url": "https://atelieraphelion.com",
+    "faq_url": "",
+    "support_url": "",
+    "extra_urls": [],
+    "require": {
+        "php": ["5.6.0", "PHP 5.6.0+"]
+    },
+    "icon": ""
+}
