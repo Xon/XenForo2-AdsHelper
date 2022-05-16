@@ -40,6 +40,25 @@ class User extends XFCP_User
         return true;
     }
 
+    public function firstSeenThisSession(string $key): bool
+    {
+        $session = $this->app()->session();
+        if (!$session || !$session->isStarted())
+        {
+            return false;
+        }
+
+        $haveSeen = $session->keyExists($key);
+        if ($haveSeen)
+        {
+            return true;
+        }
+
+        $session->offsetSet($key, true);
+
+        return false;
+    }
+
     /** @noinspection PhpMissingReturnTypeInspection */
     public static function getStructure(Structure $structure)
     {
