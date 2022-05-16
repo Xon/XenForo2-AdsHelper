@@ -45,18 +45,19 @@ class User extends XFCP_User
         $session = $this->app()->session();
         if (!$session || !$session->isStarted())
         {
-            return false;
-        }
-
-        $haveSeen = $session->keyExists($key);
-        if ($haveSeen)
-        {
             return true;
         }
 
-        $session->offsetSet($key, true);
+        $offset = \XF::$time + 20*60;
+        $haveSeen = $session->keyExists($key);
+        if ($haveSeen >= $offset)
+        {
+            return false;
+        }
 
-        return false;
+        $session->offsetSet($key, $offset);
+
+        return true;
     }
 
     /** @noinspection PhpMissingReturnTypeInspection */
