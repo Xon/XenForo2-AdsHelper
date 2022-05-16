@@ -40,7 +40,7 @@ class User extends XFCP_User
         return true;
     }
 
-    public function firstSeenThisSession(string $key): bool
+    public function isNotSeenThisSession(string $key): bool
     {
         $session = $this->app()->session();
         if (!$session || !$session->isStarted())
