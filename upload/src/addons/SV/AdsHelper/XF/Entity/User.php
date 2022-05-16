@@ -40,7 +40,7 @@ class User extends XFCP_User
         return true;
     }
 
-    public function isNotSeenThisSession(string $key): bool
+    public function isNotSeenThisSession(string $key, ?int $duration = null): bool
     {
         $session = $this->app()->session();
         if (!$session || !$session->isStarted())
@@ -48,11 +48,16 @@ class User extends XFCP_User
             return true;
         }
 
-        $offset = \XF::$time + 20*60;
-        $haveSeen = $session->keyExists($key);
-        if ($haveSeen >= $offset)
+        $duration = $duration ?? 20;
+        $offset = \XF::$time + $duration*60;
+
+        if ($session->keyExists($key))
         {
-            return false;
+            $seenTimestamp = (int)$session->get($key);
+            if ($seenTimestamp >= $offset)
+            {
+                return false;
+            }
         }
 
         $session->offsetSet($key, $offset);
