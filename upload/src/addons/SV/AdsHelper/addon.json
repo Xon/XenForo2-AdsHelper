@@ -2,8 +2,8 @@
     "legacy_addon_id": "",
     "title": "Ads Helper",
     "description": "Inject state into $xf.visitor for ad tracking",
-    "version_id": 1010100,
-    "version_string": "1.1.1",
+    "version_id": 1020000,
+    "version_string": "1.2.0",
     "dev": "Atelier Aphelion",
     "dev_url": "https://atelieraphelion.com",
     "faq_url": "",
@@ -11,7 +11,7 @@
     "extra_urls": [],
     "require": {
         "XF": [2020070, "XenForo 2.2.0+"],
-        "php": ["7.4.0", "PHP 7.4.0+"]
+        "php": ["8.0.0", "PHP 8.0.0+"]
     },
     "icon": ""
 }

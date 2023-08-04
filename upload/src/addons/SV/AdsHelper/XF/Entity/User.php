@@ -3,8 +3,11 @@
 namespace SV\AdsHelper\XF\Entity;
 
 use ArrayObject;
+use XF\Mvc\Entity\AbstractCollection;
 use XF\Mvc\Entity\Structure;
 use function count;
+use function is_array;
+use function reset;
 
 /**
  * Extends \XF\Entity\User
@@ -21,6 +24,47 @@ class User extends XFCP_User
         }
 
         return $this->adsInfo;
+    }
+
+    public function isPostFirstOrFirstThreadmarked(\XF\Entity\Post $post, $posts): bool
+    {
+        $adsInfo = $this->getAdsInfo();
+
+        $firstThreadmarkPosition = $adsInfo['firstThreadmarkPosition'] ?? null;
+        if ($firstThreadmarkPosition === null)
+        {
+            if ($posts instanceof AbstractCollection)
+            {
+                $posts = $posts->toArray();
+            }
+            else if (!is_array($posts))
+            {
+                $posts = [];
+            }
+            /** @var \XF\Entity\Post[]|\SV\Threadmarks\XF\Entity\Post[] $posts */
+            if ($post->hasRelation('Threadmark'))
+            {
+                foreach ($posts as $p)
+                {
+                    if ($p->Threadmark !== null)
+                    {
+                        $firstThreadmarkPosition = $p->position;
+                        break;
+                    }
+                }
+            }
+
+            if ($firstThreadmarkPosition === null)
+            {
+                $p = $posts ? reset($posts) : null;
+                $firstThreadmarkPosition = $p->position ?? 0;
+            }
+
+
+            $adsInfo['firstThreadmarkPosition'] = $firstThreadmarkPosition;
+        }
+
+        return $firstThreadmarkPosition === $post->position;
     }
 
     public function canViewAds(): bool
@@ -49,7 +93,7 @@ class User extends XFCP_User
         }
 
         $duration = $duration ?? 20;
-        $offset = \XF::$time + $duration*60;
+        $offset = \XF::$time + $duration * 60;
 
         if ($session->keyExists($key))
         {
