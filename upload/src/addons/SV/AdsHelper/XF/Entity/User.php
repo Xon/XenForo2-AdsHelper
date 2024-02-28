@@ -69,6 +69,11 @@ class User extends XFCP_User
 
     public function canViewAds(): bool
     {
+        if (!$this->getOption('canViewAds'))
+        {
+            return false;
+        }
+
         if (!$this->user_id)
         {
             return true;
