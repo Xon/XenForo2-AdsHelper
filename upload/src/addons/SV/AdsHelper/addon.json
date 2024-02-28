@@ -3,12 +3,14 @@
     "title": "Ads Helper",
     "description": "Inject state into $xf.visitor for ad tracking",
     "version_id": 1020000,
-    "version_string": "1.2.0",
+    "version_string": "1.2.1",
     "dev": "Atelier Aphelion",
     "dev_url": "https://atelieraphelion.com",
     "faq_url": "",
     "support_url": "",
-    "extra_urls": [],
+    "extra_urls": {
+        "Add-on site": "https://atelieraphelion.com/products/"
+    },
     "require": {
         "XF": [2020070, "XenForo 2.2.0+"],
         "php": ["8.0.0", "PHP 8.0.0+"]
