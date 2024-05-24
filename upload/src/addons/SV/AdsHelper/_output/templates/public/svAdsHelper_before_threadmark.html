@@ -1,0 +1,9 @@
+<xf:if is="$xf.visitor.isPostFirstOrFirstThreadmarked($post, $posts)">
+<xf:set var="$beforeThreadmark"><xf:trim><xf:ad position="svAdsHelper_before_threadmark" arg-post="{$post}" /></xf:trim></xf:set>
+<xf:if is=" $beforeThreadmark !== '' ">
+<xf:if is="$xf.visitor.adsInfo.movedAnchorTarget">
+<span class="u-anchorTarget" id="post-{$post.post_id}"></span>
+</xf:if>
+{$beforeThreadmark}
+</xf:if>
+</xf:if>

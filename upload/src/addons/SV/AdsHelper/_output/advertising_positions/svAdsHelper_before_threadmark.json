@@ -1,0 +1,9 @@
+{
+    "arguments": [
+        {
+            "argument": "post",
+            "required": true
+        }
+    ],
+    "active": true
+}

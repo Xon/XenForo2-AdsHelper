@@ -1,0 +1,9 @@
+{
+    "template": "svThreadmarks_macros",
+    "description": "Allow moving the post anchor id",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "#<xf:macro name=\"content_bar\".*?<xf:if is=\"\\$isHeader && \\$anchorId#si",
+    "replace": "$0 && ($xf.visitor.adsInfo.movedAnchorTarget && !$xf.visitor.isPostFirstOrFirstThreadmarked($content, []))"
+}

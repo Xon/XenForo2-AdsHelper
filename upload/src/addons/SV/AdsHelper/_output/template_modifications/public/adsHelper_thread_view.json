@@ -1,0 +1,9 @@
+{
+    "template": "thread_view",
+    "description": "Inject before 1st threadmark ads banner",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "#[\\t ]*<xf:extension (?:id|name)=\"messages_block_body_before_post\"#si",
+    "replace": "<xf:include template=\"svAdsHelper_before_threadmark\" />\n$0"
+}
