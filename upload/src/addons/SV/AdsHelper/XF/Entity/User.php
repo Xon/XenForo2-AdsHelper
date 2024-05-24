@@ -10,7 +10,7 @@ use function is_array;
 use function reset;
 
 /**
- * Extends \XF\Entity\User
+ * @extends \XF\Entity\User
  */
 class User extends XFCP_User
 {
@@ -26,8 +26,12 @@ class User extends XFCP_User
         return $this->adsInfo;
     }
 
-    public function isPostFirstOrFirstThreadmarked(\XF\Entity\Post $post, $posts): bool
+    public function isPostFirstOrFirstThreadmarked($post, $posts): bool
     {
+        if (!$post instanceof \XF\Entity\Post)
+        {
+            return false;
+        }
         $adsInfo = $this->getAdsInfo();
 
         $firstThreadmarkPosition = $adsInfo['firstThreadmarkPosition'] ?? null;
