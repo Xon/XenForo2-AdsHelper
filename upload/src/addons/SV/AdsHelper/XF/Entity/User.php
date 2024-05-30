@@ -45,25 +45,57 @@ class User extends XFCP_User
             {
                 $posts = [];
             }
-            /** @var \XF\Entity\Post[]|\SV\Threadmarks\XF\Entity\Post[] $posts */
+
+            /** @var \SV\Threadmarks\XF\Entity\Post[] $posts */
             if ($post->hasRelation('Threadmark'))
             {
+                // ignore sticky post is possible
+                $stickyPostPosition = null;
+                if (\XF::isAddOnActive('SV/StickyAnyPost'))
+                {
+                    $p = $posts ? reset($posts) : null;
+                    /** @var \SV\StickyAnyPost\XF\Entity\Thread $thread */
+                    $thread = $p->Thread;
+                    $stickyPostPosition = $thread->sv_sticky_post_position;
+                }
+
+                $stickyThreadmarkPosition = null;
                 foreach ($posts as $p)
                 {
-                    if ($p->Threadmark !== null)
+                    if ($p->Threadmark === null)
                     {
-                        $firstThreadmarkPosition = $p->position;
+                        continue;
+                    }
+
+                    $postPosition = $p->position;
+                    $isSticky = $postPosition === $stickyPostPosition;
+                    if ($stickyThreadmarkPosition === null && $isSticky)
+                    {
+                        $stickyThreadmarkPosition = $postPosition;
+                    }
+                    else if (!$isSticky)
+                    {
+                        $firstThreadmarkPosition = $postPosition;
                         break;
                     }
                 }
+
+                if ($firstThreadmarkPosition === null)
+                {
+                    $firstThreadmarkPosition = $stickyThreadmarkPosition;
+                }
             }
 
-            if ($firstThreadmarkPosition === null)
+            if ((\XF::options()->svAdOnFirstNonThreadmarkPost ?? true) && $firstThreadmarkPosition === null)
             {
                 $p = $posts ? reset($posts) : null;
                 $firstThreadmarkPosition = $p->position ?? 0;
             }
 
+            if ($firstThreadmarkPosition === null)
+            {
+                $firstThreadmarkPosition = -1;
+            }
 
             $adsInfo['firstThreadmarkPosition'] = $firstThreadmarkPosition;
         }
