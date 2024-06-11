@@ -5,6 +5,7 @@ namespace SV\AdsHelper\XF\Entity;
 use ArrayObject;
 use XF\Mvc\Entity\AbstractCollection;
 use XF\Mvc\Entity\Structure;
+use function array_key_exists;
 use function count;
 use function is_array;
 use function reset;
@@ -24,6 +25,131 @@ class User extends XFCP_User
         }
 
         return $this->adsInfo;
+    }
+
+    public function dataAdsSvSet(string $key, ?string $value): void
+    {
+        $adsInfo = $this->getAdsInfo();
+        if ($value === null)
+        {
+            unset($adsInfo[$key]);
+        }
+        else
+        {
+            $adsInfo[$key] = $value;
+        }
+    }
+
+    public function isPostWordCountMet($post, $posts): bool
+    {
+        if (!$post instanceof \XF\Entity\Post)
+        {
+            return false;
+        }
+        if (!$post->hasRelation('Threadmark'))
+        {
+            return false;
+        }
+
+        $adEveryXWords = (int)(\XF::options()->svAdEveryXWords ?? 0);
+        if ($adEveryXWords === 0)
+        {
+            return false;
+        }
+
+        $adsInfo = $this->getAdsInfo();
+        $adsByWordCountPosition = $adsInfo['adsByWordCountPosition'] ?? [];
+        /** @var \SV\WordCountSearch\XF\Entity\Post $post */
+        $position = $post->position;
+
+        $showAd = $adsByWordCountPosition[$position] ?? null;
+
+        if ($showAd === null)
+        {
+            if ($posts instanceof AbstractCollection)
+            {
+                $posts = $posts->toArray();
+            }
+            else if (!is_array($posts))
+            {
+                $posts = [];
+            }
+
+            $wordCountTotal = 0;
+            /** @var \SV\WordCountSearch\XF\Entity\Post[] $posts */
+            foreach ($posts as $p)
+            {
+                $adsByWordCountPosition[$position] = $wordCountTotal === 0;
+                $wordCount = $p->RawWordCount;
+                $wordCountTotal += $wordCount;
+
+                if ($wordCountTotal >= $adEveryXWords)
+                {
+                    $wordCountTotal = 0;
+                }
+            }
+
+            $adsInfo['adsByWordCountPosition'] = $adsByWordCountPosition;
+        }
+
+        return $showAd;
+    }
+
+    public function isPostFirstThreadmarkedInCategory($post, $posts): bool
+    {
+        if (!$post instanceof \XF\Entity\Post)
+        {
+            return false;
+        }
+        if (!$post->hasRelation('Threadmark'))
+        {
+            return false;
+        }
+        /** @var \SV\Threadmarks\XF\Entity\Post $post */
+        $threadmark = $post->Threadmark;
+        if ($threadmark === null)
+        {
+            return false;
+        }
+
+        $adsInfo = $this->getAdsInfo();
+
+        $position = $post->position;
+        $threadmarkCategoryId = $post->Threadmark->threadmark_category_id;
+        $firstThreadmarkByCategory = $adsInfo['firstThreadmarkByCategory'] ?? [];
+
+        $positionByCategory = $firstThreadmarkByCategory[$threadmarkCategoryId] ?? null;
+        if ($positionByCategory === null)
+        {
+            if ($posts instanceof AbstractCollection)
+            {
+                $posts = $posts->toArray();
+            }
+            else if (!is_array($posts))
+            {
+                $posts = [];
+            }
+
+            /** @var \SV\Threadmarks\XF\Entity\Post[] $posts */
+            foreach ($posts as $p)
+            {
+                $threadmark = $p->Threadmark;
+                if ($threadmark !== null && $threadmark->threadmark_category_id === $threadmarkCategoryId)
+                {
+                    $firstThreadmarkByCategory[$threadmarkCategoryId] = $positionByCategory = $p->position;
+                    break;
+                }
+            }
+
+            if ($positionByCategory === null)
+            {
+                $firstThreadmarkByCategory[$threadmarkCategoryId] = $positionByCategory = $position;
+            }
+
+            $adsInfo['firstThreadmarkByCategory'] = $firstThreadmarkByCategory;
+        }
+
+        return $positionByCategory === $position;
     }
 
     public function isPostFirstOrFirstThreadmarked($post, $posts): bool
