@@ -27,6 +27,13 @@ class User extends XFCP_User
         return $this->adsInfo;
     }
 
+    public function dataAdsSvGet(string $key)
+    {
+        $adsInfo = $this->getAdsInfo();
+
+        return $adsInfo[$key] ?? null;
+    }
+
     public function dataAdsSvSet(string $key, ?string $value): void
     {
         $adsInfo = $this->getAdsInfo();
