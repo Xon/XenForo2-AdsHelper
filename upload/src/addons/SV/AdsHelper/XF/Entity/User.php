@@ -187,9 +187,12 @@ class User extends XFCP_User
                 if (\XF::isAddOnActive('SV/StickyAnyPost'))
                 {
                     $p = $posts ? reset($posts) : null;
-                    /** @var \SV\StickyAnyPost\XF\Entity\Thread $thread */
-                    $thread = $p->Thread;
-                    $stickyPostPosition = $thread->sv_sticky_post_position;
+                    if ($p !== null)
+                    {
+                        /** @var \SV\StickyAnyPost\XF\Entity\Thread $thread */
+                        $thread = $p->Thread;
+                        $stickyPostPosition = $thread->sv_sticky_post_position;
+                    }
                 }
 
                 $stickyThreadmarkPosition = null;
