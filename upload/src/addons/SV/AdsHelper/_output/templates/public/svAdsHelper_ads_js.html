@@ -1,6 +1,6 @@
 <xf:if is="$xf.options.adsHelper_siteId && $xf.visitor.hasOption('canViewAds') && $xf.visitor.canViewAds">
 <!-- Venatus Ad Manager -->
-<script src="https://hb.vntsm.com/v3/live/ad-manager.min.js" type="text/javascript" data-site-id="{$xf.options.adsHelper_site_id}" {{
+<script src="https://hb.vntsm.com/v3/live/ad-manager.min.js" type="text/javascript" data-site-id="{$xf.options.adsHelper_siteId}" {{
 		$xf.visitor.personalizedAdsId ? 'data-user-id-hash="' . $xf.visitor.personalizedAdsId . '"' : ''
 		}} data-mode="scan" async></script>
 <!-- / Venatus Ad Manager -->

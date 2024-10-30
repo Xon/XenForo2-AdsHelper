@@ -1,9 +1,9 @@
 {
-    "template": "PAGE_CONTAINER",
+    "template": "helper_js_global",
     "description": "Inject ads js",
     "execution_order": 10,
     "enabled": true,
-    "action": "str_replace",
-    "find": "<head>",
-    "replace": "$0\n<xf:include template=\"svAdsHelper_ads_js\"/>"
+    "action": "preg_replace",
+    "find": "#(<xf:macro\\s+(?:id|name)=\"head\".*?/>.*?)(</xf:macro>)#si",
+    "replace": "$1\n<xf:if is=\"$app === 'public'\">\n<xf:include template=\"svAdsHelper_ads_js\"/>\n</xf:if>\n$2"
 }
