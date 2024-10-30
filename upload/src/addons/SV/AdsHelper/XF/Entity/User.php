@@ -3,9 +3,12 @@
 namespace SV\AdsHelper\XF\Entity;
 
 use ArrayObject;
+use SV\AdsHelper\Util\NormalizeEmail;
 use XF\Mvc\Entity\AbstractCollection;
 use XF\Mvc\Entity\Structure;
+use function base64_encode;
 use function count;
+use function hash;
 use function is_array;
 use function reset;
 
@@ -269,12 +272,18 @@ class User extends XFCP_User
 
     protected function getPersonalizedAdsId(): string
     {
-        if (!(\XF::options()->adsHelper_personalizeAds ?? ''))
+        if (!$this->user_id || !(\XF::options()->adsHelper_personalizeAds ?? ''))
         {
             return '';
         }
 
-        return '';
+        $normalizedEmail = NormalizeEmail::normalize($this->email);
+        if ($normalizedEmail === null)
+        {
+            return '';
+        }
+
+        return base64_encode(hash('sha256', base64_encode($normalizedEmail), true));
     }
 
     public function isNotSeenThisSession(string $key, ?int $duration = null): bool
