@@ -5,7 +5,6 @@ namespace SV\AdsHelper\XF\Entity;
 use ArrayObject;
 use XF\Mvc\Entity\AbstractCollection;
 use XF\Mvc\Entity\Structure;
-use function array_key_exists;
 use function count;
 use function is_array;
 use function reset;
@@ -186,6 +185,7 @@ class User extends XFCP_User
                 $stickyPostPosition = null;
                 if (\XF::isAddOnActive('SV/StickyAnyPost'))
                 {
+                    /** @var \XF\Entity\Post|null $p */
                     $p = $posts ? reset($posts) : null;
                     if ($p !== null)
                     {
@@ -224,6 +224,7 @@ class User extends XFCP_User
 
             if ((\XF::options()->svAdOnFirstNonThreadmarkPost ?? true) && $firstThreadmarkPosition === null)
             {
+                /** @var \XF\Entity\Post|null $p */
                 $p = $posts ? reset($posts) : null;
                 $firstThreadmarkPosition = $p->position ?? 0;
             }
