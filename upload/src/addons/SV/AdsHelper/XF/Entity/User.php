@@ -247,6 +247,11 @@ class User extends XFCP_User
             return false;
         }
 
+        if (\XF::isAddOnActive('Siropu/AdsManager') && $this->hasPermission('siropuAdsManager', 'viewAds'))
+        {
+            return true;
+        }
+
         if (!$this->user_id)
         {
             return true;
@@ -260,6 +265,16 @@ class User extends XFCP_User
         }
 
         return true;
+    }
+
+    protected function getPersonalizedAdsId(): string
+    {
+        if (!(\XF::options()->adsHelper_personalizeAds ?? ''))
+        {
+            return '';
+        }
+
+        return '';
     }
 
     public function isNotSeenThisSession(string $key, ?int $duration = null): bool
@@ -294,6 +309,7 @@ class User extends XFCP_User
 
         $structure->getters['adsInfo'] = ['getter' => 'getAdsInfo', 'cache' => false];
         $structure->getters['canViewAds'] = ['getter' => 'canViewAds', 'cache' => true];
+        $structure->getters['personalizedAdsId'] = ['getter' => 'getPersonalizedAdsId', 'cache' => true];
         $structure->options['canViewAds'] = true;
 
         return $structure;
