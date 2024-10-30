@@ -2,10 +2,11 @@
 
 namespace SV\AdsHelper\Util;
 
+use function mb_strrpos;
+use function mb_strtolower;
+use function mb_substr;
 use function preg_replace;
 use function str_replace;
-use function strrpos;
-use function substr;
 
 abstract class NormalizeEmail
 {
