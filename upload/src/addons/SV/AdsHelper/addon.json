@@ -9,7 +9,8 @@
     "faq_url": "",
     "support_url": "",
     "extra_urls": {
-        "Add-on site": "https://atelieraphelion.com/products/"
+        "License": "https://atelieraphelion.com/products/ads-helper.260/copyright",
+        "Add-on site": "https://atelieraphelion.com/products/ads-helper.260/"
     },
     "require": {
         "XF": [
