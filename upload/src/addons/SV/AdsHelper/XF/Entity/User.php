@@ -116,7 +116,7 @@ class User extends XFCP_User
         }
         /** @var \SV\Threadmarks\XF\Entity\Post $post */
         $threadmark = $post->Threadmark;
-        if ($threadmark === null)
+        if ($threadmark === null || !$threadmark->isVisible())
         {
             return false;
         }
@@ -143,7 +143,7 @@ class User extends XFCP_User
             foreach ($posts as $p)
             {
                 $threadmark = $p->Threadmark;
-                if ($threadmark !== null && $threadmark->threadmark_category_id === $threadmarkCategoryId)
+                if ($threadmark !== null && $threadmark->isVisible() && $threadmark->threadmark_category_id === $threadmarkCategoryId)
                 {
                     $firstThreadmarkByCategory[$threadmarkCategoryId] = $positionByCategory = $p->position;
                     break;
@@ -201,7 +201,8 @@ class User extends XFCP_User
                 $stickyThreadmarkPosition = null;
                 foreach ($posts as $p)
                 {
-                    if ($p->Threadmark === null)
+                    $threadmark = $p->Threadmark;
+                    if ($threadmark === null || !$threadmark->isVisible())
                     {
                         continue;
                     }
