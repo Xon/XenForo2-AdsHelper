@@ -251,9 +251,9 @@ class User extends XFCP_User
             return false;
         }
 
-        if (\XF::isAddOnActive('Siropu/AdsManager') && $this->hasPermission('siropuAdsManager', 'viewAds'))
+        if (\XF::isAddOnActive('Siropu/AdsManager') && !$this->hasPermission('siropuAdsManager', 'viewAds'))
         {
-            return true;
+            return false;
         }
 
         if (!$this->user_id)
