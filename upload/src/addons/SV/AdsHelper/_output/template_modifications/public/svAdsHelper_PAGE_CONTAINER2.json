@@ -1,0 +1,9 @@
+{
+    "template": "PAGE_CONTAINER",
+    "description": "Inject advertising slot into the end of the head tag",
+    "execution_order": 1,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "</head>",
+    "replace": "<xf:ad position=\"svAdsHelper_head_tag_end\" />\n$0"
+}
