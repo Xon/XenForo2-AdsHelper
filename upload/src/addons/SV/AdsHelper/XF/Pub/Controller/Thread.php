@@ -11,7 +11,7 @@ use XF\Mvc\Entity\AbstractCollection;
 class Thread extends XFCP_Thread
 {
     /** @noinspection PhpMissingReturnTypeInspection */
-    protected function getNewPostsReplyInternal(\XF\Entity\Thread $thread, AbstractCollection $posts, \XF\Entity\Post $firstUnshownPost = null)
+    protected function getNewPostsReplyInternal(\XF\Entity\Thread $thread, AbstractCollection $posts, ?\XF\Entity\Post $firstUnshownPost = null)
     {
         /** @var ExtendedUserEntity $visitor */
         $visitor = \XF::visitor();
