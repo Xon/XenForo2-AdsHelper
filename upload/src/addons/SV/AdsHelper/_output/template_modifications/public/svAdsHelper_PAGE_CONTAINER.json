@@ -4,6 +4,6 @@
     "execution_order": 1,
     "enabled": true,
     "action": "preg_replace",
-    "find": "#<head[^>]*>#si",
+    "find": "#<head(|\\s+[^>]*)>#si",
     "replace": "$0\n<xf:ad position=\"svAdsHelper_head_tag\" />"
 }
